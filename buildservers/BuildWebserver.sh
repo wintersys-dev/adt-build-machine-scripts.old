@@ -255,9 +255,9 @@ do
 			#If we are here then the build did succeed and we can add the IP address to the DNS system
 			if ( [ "${NO_REVERSE_PROXY}" = "0" ] || [ "${AUTHENTICATOR_TYPE}" = "wire-guard" ] )
 			then
-				if ( [ ! -f ${BUILD_HOME}/runtime/${CLOUDHOST}/${BUILD_IDENTIFIER}/DNS_PRIMED ] )
+				if ( [ ! -f ${BUILD_HOME}/runtime/${CLOUDHOST}/${BUILD_IDENTIFIER}/WS_DNS_PRIMED ] )
 				then
-					/bin/touch ${BUILD_HOME}/runtime/${CLOUDHOST}/${BUILD_IDENTIFIER}/DNS_PRIMED
+					/bin/touch ${BUILD_HOME}/runtime/${CLOUDHOST}/${BUILD_IDENTIFIER}/WS_DNS_PRIMED
 					${BUILD_HOME}/initialisation/InitialiseDNSRecord.sh ${ip} "primary"
 				else
 					${BUILD_HOME}/initialisation/InitialiseDNSRecord.sh ${ip} "secondary"	
