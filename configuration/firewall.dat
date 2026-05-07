@@ -104,6 +104,10 @@ DATABASEPORTS:
 # Of course this looks like its world accessible based on the firewall settings but actually the access is controlled by 
 # crpyptokey routing rather than the firewall. So, anyone without an appropriate crypto key will not be able to access
 # this port
+# Similarly:
+# WEBSERVERPORTS:443|ipv4|0.0.0.0/0
+# Allows access through the native firewall but the operating system firewall (ufw or iptables) will block all ip
+# addresses except the ip addresses of our proxy machines behind the scenes. 
 #############################################################################################################
 AUTHENTICATORPORTS:443|ipv4|cloudflare  
 REVERSEPROXYPORTS:1036|ipv4|0.0.0.0/0
