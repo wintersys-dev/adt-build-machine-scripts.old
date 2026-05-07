@@ -81,27 +81,27 @@ rule_build_machine_ssl='{"addresses":{"ipv4":["'${build_machine_ip}/32'"]},"acti
 rule_icmp='{"addresses":{"ipv4":["0.0.0.0/0"]},"action":"ACCEPT","protocol":"ICMP"}'
 firewall_rules=""
 
-if ( [ "${firewall_name}" = "adt-authenticator" ] )
+if ( [ "`/bin/echo ${firewall_name} | /bin/grep "adt-authenticator"`" != "" ] )
 then
         firewall_rules="`linode_firewall_rules "${authenticator_firewall_ports}"`"
 fi
 
-if ( [ "${firewall_name}" = "adt-reverseproxy" ] )
+if ( [ "`/bin/echo ${firewall_name} | /bin/grep "adt-reverseproxy"`" != "" ] )
 then
         firewall_rules="`linode_firewall_rules "${reverseproxy_firewall_ports}"`"
 fi
 
-if ( [ "${firewall_name}" = "adt-autoscaler" ] )
+if ( [ "`/bin/echo ${firewall_name} | /bin/grep "adt-autoscaler"`" != "" ] )
 then
         firewall_rules="`linode_firewall_rules "${autoscaler_firewall_ports}"`"
 fi
 
-if ( [ "${firewall_name}" = "adt-webserver" ] )
+if ( [ "`/bin/echo ${firewall_name} | /bin/grep "adt-webserver"`" != "" ] )
 then
         firewall_rules="`linode_firewall_rules "${webserver_firewall_ports}"`"
 fi
 
-if ( [ "${firewall_name}" = "adt-database" ] )
+if ( [ "`/bin/echo ${firewall_name} | /bin/grep "adt-database"`" != "" ] )
 then
         firewall_rules="`linode_firewall_rules "${database_firewall_ports}"`"
 fi
