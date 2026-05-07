@@ -222,9 +222,9 @@ do
                         #If we are here then we believe that the build completed correctly so the public IP address for the our reverseproxy machine
                         #Is added to the DNS provider
 
-						if ( [ ! -f ${BUILD_HOME}/runtime/${CLOUDHOST}/${BUILD_IDENTIFIER}/DNS_PRIMED ] )
+						if ( [ ! -f ${BUILD_HOME}/runtime/${CLOUDHOST}/${BUILD_IDENTIFIER}/RP_DNS_PRIMED ] )
 						then
-							/bin/touch ${BUILD_HOME}/runtime/${CLOUDHOST}/${BUILD_IDENTIFIER}/DNS_PRIMED
+							/bin/touch ${BUILD_HOME}/runtime/${CLOUDHOST}/${BUILD_IDENTIFIER}/RP_DNS_PRIMED
 							${BUILD_HOME}/initialisation/InitialiseDNSRecord.sh ${ip} "primary" "" "${AUTHENTICATOR_TYPE}"
 						else
 							${BUILD_HOME}/initialisation/InitialiseDNSRecord.sh ${ip} "secondary" "" "${AUTHENTICATOR_TYPE}"
