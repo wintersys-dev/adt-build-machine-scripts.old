@@ -125,19 +125,6 @@ fi
 
 if ( [ "${IN_PARALLEL}" = "0" ] && [ "${PRODUCTION}" = "1" ] )
 then
-	tally="0"
-	while ( [ "${tally}" -lt "${NO_WEBSERVERS}" ] )
-	do
-		tally="`/usr/bin/expr ${tally} + 1`"
-		${BUILD_HOME}/buildservers/BuildWebserver.sh ${tally} 
-		/bin/sleep 10
-	done
-
-	if ( [ "${DB_INSTALL_MODE}" != "0" ] )
-	then
-		${BUILD_HOME}/buildservers/BuildDatabase.sh
-	fi
-
 	if ( [ "${NO_AUTHENTICATORS}" != "0" ] )
 	then
 		tally="0"
@@ -158,35 +145,23 @@ then
 			${BUILD_HOME}/buildservers/BuildReverseProxy.sh ${tally}
 		done
 	fi
-elif ( [ "${IN_PARALLEL}" = "1" ] && [ "${PRODUCTION}" = "1" ] )
-then
-	tally="0"
-	while ( [ "${tally}" -lt "${NO_WEBSERVERS}" ] )
-	do
-		tally="`/usr/bin/expr ${tally} + 1`"
-		${BUILD_HOME}/buildservers/BuildWebserver.sh ${tally} &
-		pids="${pids} $!"
-		/bin/sleep 10
-	done
+	
+	if ( [ "${NO_WEBSERVERS}" != "0" ] )
+	then
+		tally="0"
+		while ( [ "${tally}" -lt "${NO_WEBSERVERS}" ] )
+		do
+			tally="`/usr/bin/expr ${tally} + 1`"
+			${BUILD_HOME}/buildservers/BuildWebserver.sh ${tally} 
+		done
+	fi
 
 	if ( [ "${DB_INSTALL_MODE}" != "0" ] )
 	then
-		${BUILD_HOME}/buildservers/BuildDatabase.sh &
-		pids="${pids} $!"
+		${BUILD_HOME}/buildservers/BuildDatabase.sh
 	fi
-
-
-	if ( [ "${NO_AUTHENTICATORS}" != "0" ] )
-	then
-		tally="0"
-		while ( [ "${tally}" -lt "${NO_AUTHENTICATORS}" ] )
-		do
-			tally="`/usr/bin/expr ${tally} + 1`"
-			${BUILD_HOME}/buildservers/BuildAuthenticator.sh ${tally} &
-			pids="${pids} $!"
-			/bin/sleep 10
-		done		
-	fi
+elif ( [ "${IN_PARALLEL}" = "1" ] && [ "${PRODUCTION}" = "1" ] )
+then
 
 	if ( [ "${NO_REVERSE_PROXY}" -ne "0" ] )
 	then
@@ -198,26 +173,41 @@ then
 			pids="${pids} $!"
 			/bin/sleep 10
 		done
+	fi
+
+	if ( [ "${NO_WEBSERVERS}" -ne "0" ] )
+	then
+		tally="0"
+		while ( [ "${tally}" -lt "${NO_WEBSERVERS}" ] )
+		do
+			tally="`/usr/bin/expr ${tally} + 1`"
+			${BUILD_HOME}/buildservers/BuildWebserver.sh ${tally} &
+			pids="${pids} $!"
+			/bin/sleep 10
+		done
+	fi
+	
+	if ( [ "${DB_INSTALL_MODE}" != "0" ] )
+	then
+		${BUILD_HOME}/buildservers/BuildDatabase.sh &
+		pids="${pids} $!"
+	fi
+
+	if ( [ "${NO_AUTHENTICATORS}" != "0" ] )
+	then
+		tally="0"
+		while ( [ "${tally}" -lt "${NO_AUTHENTICATORS}" ] )
+		do
+			tally="`/usr/bin/expr ${tally} + 1`"
+			${BUILD_HOME}/buildservers/BuildAuthenticator.sh ${tally} &
+			pids="${pids} $!"
+			/bin/sleep 10
+		done		
 	fi
 fi
 
 if ( [ "${IN_PARALLEL}" = "1" ]  &&[ "${DEVELOPMENT}" = "1" ] )
 then
-	tally="0"
-	while ( [ "${tally}" -lt "${NO_WEBSERVERS}" ] )
-	do
-		tally="`/usr/bin/expr ${tally} + 1`"
-		${BUILD_HOME}/buildservers/BuildWebserver.sh ${tally} &
-		pids="${pids} $!"
-		/bin/sleep 10
-	done
-
-	if ( [ "${DB_INSTALL_MODE}" != "0" ] )
-	then
-		${BUILD_HOME}/buildservers/BuildDatabase.sh &
-		pids="${pids} $!"
-	fi
-
 
 	if ( [ "${NO_AUTHENTICATORS}" != "0" ] )
 	then
@@ -234,13 +224,31 @@ then
 	if ( [ "${NO_REVERSE_PROXY}" -ne "0" ] )
 	then
 		tally="0"
-		while ( [ "${NO_REVERSE_PROXY}" -le "5" ] && [ "${tally}" -lt "${NO_REVERSE_PROXY}" ] )
+		while ( [ "${tally}" -lt "${NO_REVERSE_PROXY}" ] )
 		do
 			tally="`/usr/bin/expr ${tally} + 1`"
 			${BUILD_HOME}/buildservers/BuildReverseProxy.sh ${tally} &
 			pids="${pids} $!"
 			/bin/sleep 10
 		done
+	fi
+
+	if ( [ "${NO_WEBSERVERS}" -ne "0" ] )
+	then
+		tally="0"
+		while ( [ "${tally}" -lt "${NO_WEBSERVERS}" ] )
+		do
+			tally="`/usr/bin/expr ${tally} + 1`"
+			${BUILD_HOME}/buildservers/BuildWebserver.sh ${tally} &
+			pids="${pids} $!"
+			/bin/sleep 10
+		done
+	fi
+
+	if ( [ "${DB_INSTALL_MODE}" != "0" ] )
+	then
+		${BUILD_HOME}/buildservers/BuildDatabase.sh &
+		pids="${pids} $!"
 	fi
 fi
 
