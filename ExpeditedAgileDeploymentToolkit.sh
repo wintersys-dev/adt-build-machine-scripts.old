@@ -94,6 +94,11 @@ then
 	/bin/mkdir /root/logs
 fi
 
+if ( [ -f /tmp/SHUTDOWN_TRIGGERED ] )
+then
+	/bin/rm /tmp/SHUTDOWN_TRIGGERED
+fi
+
 exec 3>&1
 out_file="initiallogging-out-`/bin/date | /bin/sed 's/ //g'`"
 exec 1>>/root/logs/${out_file}
