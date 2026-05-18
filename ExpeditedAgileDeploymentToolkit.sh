@@ -74,7 +74,10 @@ end_it_all() {
 			then
 				/bin/rm /tmp/END_IT_ALL_USER
 			fi
-			/usr/bin/kill 0
+			if ( [ ! -f /tmp/SHUTDOWN_TRIGGERED ] )
+			then
+				/usr/bin/kill 0
+			fi
 		fi
 	done
 }
@@ -573,6 +576,7 @@ trap - EXIT INT
 
 if ( [ "${software_updated}" = "1" ] )
 then
-	/usr/sbin/shutdown -r now
+	/bin/touch /tmp/SHUTDOWN_TRIGGERED
+	/usr/sbin/shutdown -r now 
 fi 
 
